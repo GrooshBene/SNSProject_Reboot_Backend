@@ -3,6 +3,11 @@
  */
 module.exports = init;
 
-function init(app) {
+function init(app, Article) {
+
+    app.post('/article/write', function (req, res) {
+        var article = {
+        }
+    })
 
 }

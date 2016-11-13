@@ -5,6 +5,32 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var randomString = require('randomstring');
+
+mongoose.connect("mongodb://localhost:27017/socialmedia", function (err) {
+    if(err){
+        console.log("mongodb err");
+        throw err;
+    }
+});
+
+var schema = mongoose.Schema;
+
+var ArticleSchema = new schema({
+    _id : String,
+    author : String,
+    portrait : String,
+    location : String,
+    source : String,
+    postAge : String,
+    imageUrl : String,
+    headline : String,
+    body : String,
+    numLikes : String,
+    numComments : String
+});
+
+var Article = mongoose.model('articles', ArticleSchema);
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -26,7 +52,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 
-require('/routes/article.js')(app);
+require('/routes/article.js')(app, Article, randomString);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
