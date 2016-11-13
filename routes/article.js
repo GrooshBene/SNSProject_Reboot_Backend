@@ -6,19 +6,19 @@ module.exports = init;
 function init(app, Article, randomString) {
 
     app.post('/article/write', function (req, res) {
-        var article = {
+        var article = new Article({
             _id : randomString.generate(13),
             author : req.param('author'),
             portrait : req.param('portrait'),
             location : req.param('location'),
             source : req.param('source'),
-            postAge : req.param('postage'),
+            postAge : new Date(),
             imageUrl : req.param('imageurl'),
             headline : req.param('headline'),
             body : req.param('body'),
             numLikes : req.param('numlikes'),
             numComments : req.param('numcomments')
-        }
+        });
         article.save(function (err, silence) {
             if(err){
                 console.log('/article/write DB Error');
@@ -29,7 +29,7 @@ function init(app, Article, randomString) {
     });
 
     app.get('/article/list', function (req, res) {
-        Article.find().exec(function (err, result) {
+        Article.find().sort({postAge: -1}).exec(function (err, result) {
             if(err){
                 console.log('/article/list DB Error');
                 throw err;
@@ -39,4 +39,5 @@ function init(app, Article, randomString) {
         });
     });
 
+    //function end
 }
